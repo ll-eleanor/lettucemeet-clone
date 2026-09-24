@@ -222,7 +222,11 @@ function App() {
               {loading ? <p className="loading">Loading…</p> : displayedResponders.map(person => <button
                 key={person.id}
                 className={`responder ${(selectedId ?? hoveredPersonId) === person.id ? 'selected' : ''} ${highlightedIds && !highlightedIds.has(person.id) ? 'unavailable' : ''}`}
-                onClick={() => mode === 'view' && setSelectedId(current => current === person.id ? null : person.id)}
+                onClick={() => {
+                  if (mode !== 'view') return
+                  setHoveredPersonId(null)
+                  setSelectedId(current => current === person.id ? null : person.id)
+                }}
                 onMouseEnter={() => { if (mode === 'view' && highlightedIds === null) setHoveredPersonId(person.id) }}
                 onMouseLeave={() => mode === 'view' && setHoveredPersonId(null)}
               >{person.name}</button>)}
