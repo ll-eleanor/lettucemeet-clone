@@ -18,8 +18,8 @@ h1 { font-size: 24px; font-weight: 500; line-height: 1.5; }
 .event-actions { align-items: center; gap: 0; }
 .event-type { display: flex; align-items: center; justify-content: center; width: 34px; height: 34px; color: rgba(0,0,0,.5); }
 .event-type svg { width: 30px; height: 24px; fill: currentColor; }
-.event-button { width: 121px; height: 34px; margin-left: 33px; justify-content: center; gap: 12px; padding: 5px 15px; }
-.event-button:last-child { width: 139px; }
+.event-button { width: 105px; height: 34px; margin-left: 27px; justify-content: center; gap: 10px; padding: 5px 12px; }
+.event-button:last-child { width: 120px; }
 .event-button svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.7; }
 .event-button .pencil { display: inline-block; font-size: 21px; transform: rotate(-42deg); }
 .event-button:disabled { opacity: 1; cursor: default; }
@@ -33,12 +33,12 @@ h1 { font-size: 24px; font-weight: 500; line-height: 1.5; }
 .button.danger { color: #ef3535; border-color: #ef3535; }
 .button.danger:hover, .button.danger-fill { color: #fff; background: #ef3535; border-color: #ef3535; }
 .button:disabled { opacity: .5; cursor: default; }
-.schedule-button { width: 167px; justify-content: center; gap: 12px; }
+.schedule-button { width: 140px; justify-content: center; gap: 10px; }
 .schedule-button span { font-size: 22px; line-height: 12px; }
-.add-button { width: 222px; justify-content: center; gap: 13px; }
+.add-button { width: 200px; justify-content: center; gap: 11px; }
 .add-button span { display: inline-flex; width: 20px; height: 20px; align-items: center; justify-content: center; border: 1px solid currentColor; border-radius: 50%; line-height: 1; }
-.availability-card { min-height: 500px; position: relative; padding-top: 48px; }
-.availability-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 50px; }
+.availability-card { min-height: 500px; position: relative; padding-top: 58px; }
+.availability-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 55px; }
 .availability-header h2, .responders h2 { font-size: 24px; line-height: 1.5; font-weight: 400; }
 .editor-fields { display: grid; grid-template-columns: minmax(220px, 1fr) auto; column-gap: 25px; row-gap: 9px; align-items: end; padding: 24px; margin: -25px 0 35px; border: 1px solid rgba(0,157,79,.35); border-radius: 7px; }
 .editor-fields label span, .editor-fields legend { display: block; margin-bottom: 7px; color: rgba(0,0,0,.65); font-size: 13px; }
