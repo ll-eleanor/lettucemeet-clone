@@ -37,7 +37,7 @@ export const repository = {
   mode: supabase ? 'supabase' : 'local',
 
   async list(): Promise<Participant[]> {
-    if (!supabase) return localRead()
+    if (!supabase) return localRead().sort((a, b) => a.sortOrder - b.sortOrder)
     const { data, error } = await supabase
       .from('participants')
       .select('id,name,role,sort_order,availability_ranges(start_slot,end_slot)')
@@ -50,14 +50,14 @@ export const repository = {
   async create(input: ParticipantInput): Promise<void> {
     if (!supabase) {
       const participants = localRead()
-      participants.push({ id: crypto.randomUUID(), sortOrder: Math.max(0, ...participants.map(p => p.sortOrder)) + 1, ...input })
+      participants.push({ id: crypto.randomUUID(), sortOrder: Math.min(1, ...participants.map(p => p.sortOrder)) - 1, ...input })
       localWrite(participants)
       return
     }
-    const { data: lastRows, error: orderError } = await supabase.from('participants')
-      .select('sort_order').eq('event_id', EVENT_ID).order('sort_order', { ascending: false }).limit(1)
+    const { data: firstRows, error: orderError } = await supabase.from('participants')
+      .select('sort_order').eq('event_id', EVENT_ID).order('sort_order', { ascending: true }).limit(1)
     if (orderError) throw orderError
-    const sortOrder = ((lastRows?.[0]?.sort_order as number | undefined) ?? 0) + 1
+    const sortOrder = ((firstRows?.[0]?.sort_order as number | undefined) ?? 1) - 1
     const { data, error } = await supabase.from('participants').insert({
       event_id: EVENT_ID, name: input.name, role: input.role, sort_order: sortOrder,
     }).select('id').single()
