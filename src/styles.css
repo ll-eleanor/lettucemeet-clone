@@ -9,9 +9,9 @@ a:hover { color: #009d4f; }
 .site-header { height: 100px; padding: 0 100px; display: flex; align-items: center; justify-content: space-between; }
 .logo { display: block; width: 125px; }
 .logo img { display: block; width: 100%; height: auto; }
-nav { display: flex; gap: 34px; text-transform: uppercase; font-size: 14px; font-weight: 500; }
+nav { display: flex; gap: 25px; text-transform: uppercase; font-size: 14px; font-weight: 500; }
 main { padding: 0 200px 100px; }
-.event-heading { display: flex; align-items: flex-start; justify-content: space-between; margin-top: 50px; padding-bottom: 68px; border-bottom: 1px solid rgba(0,0,0,.1); }
+.event-heading { display: flex; align-items: flex-start; justify-content: space-between; margin-top: 50px; padding-bottom: 46px; border-bottom: 1px solid rgba(0,0,0,.1); }
 h1, h2, p { margin: 0; }
 h1 { font-size: 24px; font-weight: 500; line-height: 1.5; }
 .event-actions, .availability-actions { display: flex; gap: 17px; }
@@ -37,8 +37,8 @@ h1 { font-size: 24px; font-weight: 500; line-height: 1.5; }
 .schedule-button span { font-size: 22px; line-height: 12px; }
 .add-button { width: 222px; justify-content: center; gap: 13px; }
 .add-button span { display: inline-flex; width: 20px; height: 20px; align-items: center; justify-content: center; border: 1px solid currentColor; border-radius: 50%; line-height: 1; }
-.availability-card { min-height: 500px; position: relative; padding-top: 63px; }
-.availability-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 69px; }
+.availability-card { min-height: 500px; position: relative; padding-top: 48px; }
+.availability-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 50px; }
 .availability-header h2, .responders h2 { font-size: 24px; line-height: 1.5; font-weight: 400; }
 .editor-fields { display: grid; grid-template-columns: minmax(220px, 1fr) auto; column-gap: 25px; row-gap: 9px; align-items: end; padding: 24px; margin: -25px 0 35px; border: 1px solid rgba(0,157,79,.35); border-radius: 7px; }
 .editor-fields label span, .editor-fields legend { display: block; margin-bottom: 7px; color: rgba(0,0,0,.65); font-size: 13px; }
@@ -55,9 +55,9 @@ h1 { font-size: 24px; font-weight: 500; line-height: 1.5; }
 .error { padding: 11px 14px; border: 1px solid #ef3535; border-radius: 5px; color: #d92828; margin: -20px 0 25px; font-size: 14px; }
 .availability-content { display: flex; align-items: flex-start; }
 .calendar-shell { flex: 1 1 auto; min-width: 360px; position: relative; }
-.month-label { padding-left: 61px; padding-bottom: 6px; font-size: 16px; }
+.month-label { padding-left: 40px; padding-bottom: 6px; font-size: 16px; }
 .calendar { display: flex; user-select: none; touch-action: none; }
-.time-column { width: 61px; flex: 0 0 61px; font-size: 11px; text-transform: uppercase; }
+.time-column { width: 40px; flex: 0 0 40px; font-size: 11px; text-transform: uppercase; }
 .timezone { height: 52px; padding: 23px 10px 0 0; color: rgba(0,0,0,.5); text-align: center; }
 .time-cell { height: 20px; padding-right: 10px; text-align: right; transform: translateY(-6px); white-space: nowrap; }
 .day-column { flex: 1 1 auto; min-width: 135px; }
@@ -68,11 +68,11 @@ h1 { font-size: 24px; font-weight: 500; line-height: 1.5; }
 .slot { position: relative; height: 20px; box-shadow: inset 1px 1px 0 #e0e0e0; color: #fff; }
 .slots.editing .slot { cursor: row-resize; }
 .slot.draft, .slot.hovered { border: 1px dashed #000; }
-.local-time { margin: 12px 0 0 61px; text-align: center; color: rgba(0,0,0,.5); font-size: 13px; }
-.responders { flex: 0 0 30%; max-width: 30%; min-width: 0; margin: 50px 0 0 40px; }
+.local-time { margin: 12px 0 0 40px; text-align: center; color: rgba(0,0,0,.5); font-size: 13px; }
+.responders { position: relative; flex: 0 0 30%; max-width: 30%; min-width: 0; margin: 50px 0 0 40px; }
 .responders h2 { display: block; white-space: nowrap; }
 .responders h2 span { color: inherit; font-size: inherit; }
-.filter-tabs { margin: 14px 0 7px; }
+.filter-tabs { position: absolute; top: -44px; right: 0; width: 100%; margin: 0; }
 .filter-tabs button { height: 31px; flex: 1; font-size: 12px; }
 .responder-list { margin-top: 10px; overflow: visible; }
 .responder { width: 100%; min-height: 40px; padding: 10px 0; border: 0; background: transparent; display: block; text-align: left; cursor: pointer; color: #111; transition: none; }
@@ -116,6 +116,7 @@ footer { height: 100px; border-top: 1px solid rgba(0,0,0,.05); display: flex; ga
   .calendar-shell { min-width: 0; width: 100%; }
   .day-column { max-width: none; }
   .responders { width: 100%; max-width: none; min-width: 0; margin: 38px 0 0; }
+  .filter-tabs { position: static; width: auto; margin: 14px 0 7px; }
   .responder-list { max-height: none; }
   footer { display: none; }
   .mobile-bar { position: fixed; z-index: 50; inset: auto 0 0; height: 75px; padding: 0 50px; background: #009d4f; display: flex; align-items: center; justify-content: flex-end; gap: 22px; }
@@ -126,8 +127,8 @@ footer { height: 100px; border-top: 1px solid rgba(0,0,0,.05); display: flex; ga
   main { padding-left: 33px; padding-right: 33px; }
   .event-heading { margin-top: 5px; }
   .calendar-shell { margin-left: -12px; width: calc(100% + 12px); }
-  .time-column { width: 53px; flex-basis: 53px; }
-  .month-label { padding-left: 53px; }
+  .time-column { width: 40px; flex-basis: 40px; }
+  .month-label { padding-left: 40px; }
   .editor-fields { padding: 18px; }
   .mobile-bar { padding: 0 33px; }
 }
