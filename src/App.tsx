@@ -23,6 +23,8 @@ function App() {
   const [participants, setParticipants] = useState<Participant[]>([])
   const [filter, setFilter] = useState<RoleFilter>('both')
   const [selectedId, setSelectedId] = useState<string | null>(null)
+  const [hoveredPersonId, setHoveredPersonId] = useState<string | null>(null)
+  const [hoveredSlot, setHoveredSlot] = useState<number | null>(null)
   const [mode, setMode] = useState<Mode>('view')
   const [name, setName] = useState('')
   const [role, setRole] = useState<Role>('exec')
@@ -66,13 +68,23 @@ function App() {
     () => participants.filter(person => filter === 'both' || person.role === filter),
     [participants, filter],
   )
+  const effectivePerson = participants.find(person => person.id === (selectedId ?? hoveredPersonId)) ?? null
+  const effectiveSlots = effectivePerson ? rangesToSlots(effectivePerson.ranges) : null
   const heatCounts = useMemo(() => Array.from({ length: SLOT_COUNT }, (_, slot) =>
     visible.reduce((count, person) => count + (rangesToSlots(person.ranges).has(slot) ? 1 : 0), 0),
   ), [visible])
   const maxCount = Math.max(1, ...heatCounts)
+  const highlightedIds = useMemo(() => {
+    if (hoveredSlot === null) return null
+    return new Set(visible.filter(person => rangesToSlots(person.ranges).has(hoveredSlot)).map(person => person.id))
+  }, [hoveredSlot, visible])
+  const displayedResponders = useMemo(() => highlightedIds
+    ? [...visible].sort((a, b) => Number(!highlightedIds.has(b.id)) - Number(!highlightedIds.has(a.id)) || a.sortOrder - b.sortOrder)
+    : visible,
+  [highlightedIds, visible])
 
   const beginAdd = () => {
-    setMode('add'); setSelectedId(null); setName(''); setRole(filter === 'jit' ? 'jit' : 'exec'); setDraftSlots(new Set()); setError('')
+    setMode('add'); setSelectedId(null); setHoveredPersonId(null); setHoveredSlot(null); setName(''); setRole(filter === 'jit' ? 'jit' : 'exec'); setDraftSlots(new Set()); setError('')
   }
   const beginEdit = () => {
     if (!selected) return
@@ -114,8 +126,6 @@ function App() {
   }
 
   const heading = mode === 'add' ? 'Add your availability' : mode === 'edit' ? `Edit ${selected?.name ?? ''}'s availability` : selected ? `${selected.name}'s availability` : 'Availabilities'
-  const selectedSlots = selected ? rangesToSlots(selected.ranges) : null
-
   return <div className="page">
     <header className="site-header">
       <Logo />
@@ -124,8 +134,8 @@ function App() {
 
     <main>
       <section className="event-heading">
-        <div><h1>EoN Day</h1><p className="event-subtitle">Tuesday, September 29</p></div>
-        <div className="event-actions"><button className="button muted">↗ Share</button><button className="button muted">✎ Edit event</button></div>
+        <h1>EoN Day</h1>
+        <div className="event-actions"><span className="event-type" title="Group">♟</span><button className="button icon-only" title="Share" aria-label="Share" onClick={() => { void navigator.clipboard?.writeText(window.location.href); setToast('Link copied!') }}>↗<span>Share</span></button></div>
       </section>
 
       <section className="availability-card">
@@ -161,24 +171,28 @@ function App() {
                 <div className="timezone">EDT</div>
                 {Array.from({ length: SLOT_COUNT }, (_, slot) => <div className="time-cell" key={slot}>{slot % 2 === 0 ? timeLabel(slot) : ''}</div>)}
               </div>
-              <div className="day-column">
+              <div className="day-column" onMouseLeave={() => mode === 'view' && setHoveredSlot(null)}>
                 <div className="day-header"><span>TUE</span><strong>29</strong></div>
                 <div className={`slots ${mode !== 'view' ? 'editing' : ''}`}>
                   {Array.from({ length: SLOT_COUNT }, (_, slot) => {
                     const draft = mode !== 'view' && draftSlots.has(slot)
-                    const isSelectedPerson = mode === 'view' && selectedSlots?.has(slot)
-                    const density = heatCounts[slot] / maxCount
-                    const background = draft || isSelectedPerson
-                      ? '#009d4f'
-                      : heatCounts[slot] ? `rgba(0, 157, 79, ${0.16 + density * 0.72})` : '#fff'
+                    const isFocusedPerson = mode === 'view' && effectiveSlots?.has(slot)
+                    const shownCount = effectivePerson ? (isFocusedPerson ? 1 : 0) : heatCounts[slot]
+                    const shownMax = effectivePerson ? 1 : maxCount
+                    const background = draft
+                      ? 'rgba(51, 204, 102, .5)'
+                      : shownCount ? `rgba(51, 204, 102, ${(shownCount / shownMax) * .9})` : 'transparent'
                     return <div
                       key={slot}
-                      className={`slot ${draft ? 'draft' : ''}`}
+                      className={`slot ${draft ? 'draft' : ''} ${mode === 'view' && hoveredSlot === slot ? 'hovered' : ''}`}
                       style={{ background }}
                       onPointerDown={event => { event.preventDefault(); paintSlot(slot, true) }}
-                      onPointerEnter={() => paintSlot(slot, false)}
+                      onPointerEnter={() => {
+                        if (mode === 'view') { setHoveredSlot(slot); setHoveredPersonId(null) }
+                        else paintSlot(slot, false)
+                      }}
                       title={`${timeLabel(slot)} – ${timeLabel(slot + 1)} · ${heatCounts[slot]} available`}
-                    ><span>{mode === 'view' && !selected && heatCounts[slot] ? heatCounts[slot] : ''}</span></div>
+                    />
                   })}
                 </div>
               </div>
@@ -186,16 +200,18 @@ function App() {
           </div>
 
           <aside className="responders">
-            <h2>Responders <span>{visible.length}</span></h2>
+            <h2>Responders <span>({highlightedIds ? `${highlightedIds.size}/${visible.length}` : visible.length})</span></h2>
             <div className="filter-tabs" role="group" aria-label="Filter responders by role">
               {(['both', 'exec', 'jit'] as const).map(value => <button key={value} className={filter === value ? 'active' : ''} onClick={() => { setFilter(value); setSelectedId(null) }}>{value === 'both' ? 'Both' : value.toUpperCase()}</button>)}
             </div>
             <div className="responder-list">
-              {loading ? <p className="loading">Loading…</p> : visible.map(person => <button
+              {loading ? <p className="loading">Loading…</p> : displayedResponders.map(person => <button
                 key={person.id}
-                className={`responder ${selectedId === person.id ? 'selected' : ''}`}
+                className={`responder ${(selectedId ?? hoveredPersonId) === person.id ? 'selected' : ''} ${highlightedIds && !highlightedIds.has(person.id) ? 'unavailable' : ''}`}
                 onClick={() => mode === 'view' && setSelectedId(current => current === person.id ? null : person.id)}
-              ><span className={`role-badge ${person.role}`}>{person.role.toUpperCase()}</span><span>{person.name}</span></button>)}
+                onMouseEnter={() => { if (mode === 'view' && highlightedIds === null) setHoveredPersonId(person.id) }}
+                onMouseLeave={() => mode === 'view' && setHoveredPersonId(null)}
+              >{person.name}</button>)}
             </div>
           </aside>
         </div>
