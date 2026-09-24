@@ -9,16 +9,21 @@ a:hover { color: #009d4f; }
 .site-header { height: 100px; padding: 0 100px; display: flex; align-items: center; justify-content: space-between; }
 .logo { display: block; width: 125px; }
 .logo img { display: block; width: 100%; height: auto; }
-nav { display: flex; gap: 30px; text-transform: uppercase; font-size: 14px; font-weight: 500; }
+nav { display: flex; gap: 34px; text-transform: uppercase; font-size: 14px; font-weight: 500; }
 main { padding: 0 200px 100px; }
-.event-heading { display: flex; align-items: flex-start; justify-content: space-between; margin: 50px 0; }
+.event-heading { display: flex; align-items: flex-start; justify-content: space-between; margin-top: 50px; padding-bottom: 68px; border-bottom: 1px solid rgba(0,0,0,.1); }
 h1, h2, p { margin: 0; }
 h1 { font-size: 24px; font-weight: 500; line-height: 1.5; }
 .event-actions, .availability-actions { display: flex; gap: 17px; }
 .event-actions { align-items: center; gap: 0; }
-.event-type { width: 30px; color: rgba(0,0,0,.5); text-align: center; font-size: 22px; transform: rotate(180deg); }
-.button.icon-only { width: 36px; height: 34px; min-height: 0; margin-left: 33px; padding: 0; font-size: 18px; }
-.button.icon-only span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); }
+.event-type { display: flex; align-items: center; justify-content: center; width: 34px; height: 34px; color: rgba(0,0,0,.5); }
+.event-type svg { width: 30px; height: 24px; fill: currentColor; }
+.event-button { width: 121px; height: 34px; margin-left: 33px; justify-content: center; gap: 12px; padding: 5px 15px; }
+.event-button:last-child { width: 139px; }
+.event-button svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.7; }
+.event-button .pencil { display: inline-block; font-size: 21px; transform: rotate(-42deg); }
+.event-button:disabled { opacity: 1; cursor: default; }
+.event-button:disabled:hover { color: rgba(0,0,0,.5); background: #fff; }
 .button { min-height: 34px; display: inline-flex; align-items: center; justify-content: center; border: 1px solid #009d4f; border-radius: 5px; padding: 7px 19px; color: #009d4f; background: #fff; cursor: pointer; transition: all .2s ease; white-space: nowrap; }
 .button:hover { color: #fff; background: #009d4f; }
 .button.primary { color: #fff; background: #009d4f; }
@@ -28,8 +33,12 @@ h1 { font-size: 24px; font-weight: 500; line-height: 1.5; }
 .button.danger { color: #ef3535; border-color: #ef3535; }
 .button.danger:hover, .button.danger-fill { color: #fff; background: #ef3535; border-color: #ef3535; }
 .button:disabled { opacity: .5; cursor: default; }
-.availability-card { min-height: 500px; position: relative; }
-.availability-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 50px; }
+.schedule-button { width: 167px; justify-content: center; gap: 12px; }
+.schedule-button span { font-size: 22px; line-height: 12px; }
+.add-button { width: 222px; justify-content: center; gap: 13px; }
+.add-button span { display: inline-flex; width: 20px; height: 20px; align-items: center; justify-content: center; border: 1px solid currentColor; border-radius: 50%; line-height: 1; }
+.availability-card { min-height: 500px; position: relative; padding-top: 63px; }
+.availability-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 69px; }
 .availability-header h2, .responders h2 { font-size: 24px; line-height: 1.5; font-weight: 400; }
 .editor-fields { display: grid; grid-template-columns: minmax(220px, 1fr) auto; column-gap: 25px; row-gap: 9px; align-items: end; padding: 24px; margin: -25px 0 35px; border: 1px solid rgba(0,157,79,.35); border-radius: 7px; }
 .editor-fields label span, .editor-fields legend { display: block; margin-bottom: 7px; color: rgba(0,0,0,.65); font-size: 13px; }
@@ -59,12 +68,13 @@ h1 { font-size: 24px; font-weight: 500; line-height: 1.5; }
 .slot { position: relative; height: 20px; box-shadow: inset 1px 1px 0 #e0e0e0; color: #fff; }
 .slots.editing .slot { cursor: row-resize; }
 .slot.draft, .slot.hovered { border: 1px dashed #000; }
-.responders { width: min(38%, 360px); min-width: 245px; margin: 50px 0 0 40px; }
+.local-time { margin: 12px 0 0 61px; text-align: center; color: rgba(0,0,0,.5); font-size: 13px; }
+.responders { flex: 0 0 30%; max-width: 30%; min-width: 0; margin: 50px 0 0 40px; }
 .responders h2 { display: block; white-space: nowrap; }
 .responders h2 span { color: inherit; font-size: inherit; }
 .filter-tabs { margin: 14px 0 7px; }
 .filter-tabs button { height: 31px; flex: 1; font-size: 12px; }
-.responder-list { max-height: 360px; overflow-y: auto; padding-right: 8px; scrollbar-color: rgba(0,157,79,.3) transparent; }
+.responder-list { margin-top: 10px; overflow: visible; }
 .responder { width: 100%; min-height: 40px; padding: 10px 0; border: 0; background: transparent; display: block; text-align: left; cursor: pointer; color: #111; transition: none; }
 .responder:hover, .responder.selected { color: #009d4f; font-weight: 500; }
 .responder.unavailable { text-decoration: line-through; opacity: .2; }
@@ -80,23 +90,24 @@ footer { height: 100px; border-top: 1px solid rgba(0,0,0,.05); display: flex; ga
 @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
 
 @media (max-width: 1279px) {
-  .site-header { padding: 0 50px; }
   main { padding-left: 160px; padding-right: 160px; }
 }
 @media (max-width: 1023px) {
+  .site-header { padding: 0 50px; }
   main { padding-left: 100px; padding-right: 100px; }
   .availability-actions { gap: 10px; }
   .button { padding-left: 13px; padding-right: 13px; font-size: 14px; }
-  .responders { min-width: 220px; }
+  .event-button { margin-left: 17px; }
 }
 @media (max-width: 768px) {
   .site-header { height: 75px; padding: 0 25px; justify-content: center; margin-bottom: 25px; }
   .logo { width: 125px; }
   nav { display: none; }
   main { padding: 0 50px 120px; }
-  .event-heading { margin: 25px 0 35px; }
+  .event-heading { margin-top: 25px; padding-bottom: 25px; }
   .event-actions { display: none; }
   h1, .availability-header h2, .responders h2 { font-size: 20px; }
+  .availability-card { padding-top: 25px; }
   .availability-header { margin-bottom: 25px; }
   .availability-actions { display: none; }
   .editor-fields { grid-template-columns: 1fr; margin-top: 0; }

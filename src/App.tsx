@@ -19,6 +19,14 @@ function Logo() {
   </a>
 }
 
+function PeopleIcon() {
+  return <svg viewBox="0 0 34 22" aria-hidden="true"><circle cx="17" cy="6" r="4"/><circle cx="7" cy="8" r="3"/><circle cx="27" cy="8" r="3"/><path d="M10 20c0-6 3-9 7-9s7 3 7 9zM0 20c.3-5 2.5-8 7-8 2 0 3.4.7 4.5 1.8A11 11 0 0 0 8 20zm34 0h-8a11 11 0 0 0-3.5-6.2A6 6 0 0 1 27 12c4.5 0 6.7 3 7 8z"/></svg>
+}
+
+function ShareIcon() {
+  return <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="18" cy="5" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="19" r="2.5"/><path d="m8.2 10.8 7.6-4.5M8.2 13.2l7.6 4.5"/></svg>
+}
+
 function App() {
   const [participants, setParticipants] = useState<Participant[]>([])
   const [filter, setFilter] = useState<RoleFilter>('both')
@@ -129,13 +137,17 @@ function App() {
   return <div className="page">
     <header className="site-header">
       <Logo />
-      <nav><a href="#how">How it works</a><a href="#help">Help</a><a href="#login">Log in</a></nav>
+      <nav><a href="#meet">Meet</a><a href="#how">How it works</a><a href="#signup">Sign up</a><a href="#login">Log in</a></nav>
     </header>
 
     <main>
       <section className="event-heading">
         <h1>EoN Day</h1>
-        <div className="event-actions"><span className="event-type" title="Group">♟</span><button className="button icon-only" title="Share" aria-label="Share" onClick={() => { void navigator.clipboard?.writeText(window.location.href); setToast('Link copied!') }}>↗<span>Share</span></button></div>
+        <div className="event-actions">
+          <span className="event-type" title="Group"><PeopleIcon /></span>
+          <button className="button muted event-button" disabled>Edit <span className="pencil">⌕</span></button>
+          <button className="button event-button" onClick={() => { void navigator.clipboard?.writeText(window.location.href); setToast('Link copied!') }}>Share <ShareIcon /></button>
+        </div>
       </section>
 
       <section className="availability-card">
@@ -144,7 +156,8 @@ function App() {
           <div className="availability-actions">
             {mode === 'view' ? <>
               {selected && <button className="button" onClick={beginEdit}>✎ Edit availability</button>}
-              <button className="button primary" onClick={beginAdd}>＋ Add availability</button>
+              <button className="button schedule-button">Schedule <span>▦</span></button>
+              <button className="button primary add-button" onClick={beginAdd}>Add availability <span>＋</span></button>
             </> : <>
               {mode === 'edit' && <button className="button danger" onClick={() => setDeleteOpen(true)}>⌫ Delete</button>}
               <button className="button" onClick={cancel}>× Cancel</button>
@@ -165,7 +178,7 @@ function App() {
 
         <div className="availability-content">
           <div className="calendar-shell">
-            <div className="month-label">September 2026</div>
+            <div className="month-label">Sep 2026</div>
             <div className="calendar">
               <div className="time-column">
                 <div className="timezone">EDT</div>
@@ -197,6 +210,7 @@ function App() {
                 </div>
               </div>
             </div>
+            <div className="local-time">Shown in local time (EDT)</div>
           </div>
 
           <aside className="responders">
